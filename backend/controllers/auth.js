@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken')
 const db = require('../models/index')
 const JWT_SECRET = 'licentasecret'
@@ -9,7 +8,7 @@ const auth = async (req, res, next) => {
         const decoded = jwt.verify(token, JWT_SECRET)
 
         const user = await db.Users.findOne({where: {id: decoded.id}})
-        if(!user){
+        if (!user) {
             throw new Error()
         }
         
@@ -17,7 +16,7 @@ const auth = async (req, res, next) => {
 
         const found = userTokens.find(utoken => utoken === token)
 
-        if(!found){
+        if (!found) {
             throw new Error()
         }
 

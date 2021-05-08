@@ -5,10 +5,6 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         description: DataTypes.STRING(2000),
-        code: {
-            type: DataTypes.STRING,
-            unique: true
-        },
         userID: DataTypes.INTEGER
     })
     return Contracts

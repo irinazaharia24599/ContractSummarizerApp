@@ -65,51 +65,10 @@ const findUserById = async (req, res) => {
     res.send(req.user)
 }
 
-
-const updateUser = async (req, res) => {
-    try {
-        const updates = Object.keys(req.body)
-        const isNotValid = updates.find(key => {
-            return key !== 'password'
-        })
-
-        if (isNotValid) {
-            return res.status(400).send({ error: "invalid updates" })
-        }
-
-        const newPassword = await bcrypt.hash(req.body.password, 8)
-        req.user.password = newPassword
-
-        await req.user.save({ fields: ['password'] })
-        res.send({
-            status: "OK"
-        })
-    } catch (err) {
-        res.status(500).send({
-            error: 'Server error'
-        })
-    }
-}
-
-const deleteUser = async (req, res) => {
-    try {
-        await req.user.destroy()
-        res.send({
-            status: "OK"
-        })
-    } catch (err) {
-        res.status(500).send({
-            error: "Server error"
-        })
-    }
-}
-
 module.exports = {
     listAllUsers,
     loginUser,
     logoutUser,
     findUserById,
-    registerUser,
-    updateUser,
-    deleteUser
+    registerUser
 }

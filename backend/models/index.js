@@ -1,4 +1,3 @@
-
 const Sequelize = require('sequelize');
 const db = {};
 //const dbConfig = require('../config/db.sample.json')
@@ -6,7 +5,10 @@ const db = {};
 const sequelize = new Sequelize('licenta', 'root', 'pass', {
     dialect: 'mysql',
     host: "localhost",
-    logging: false
+    logging: false,
+    define: {
+        timestamps: false
+    }
 })
 
 sequelize.authenticate()

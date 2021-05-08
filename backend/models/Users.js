@@ -13,13 +13,12 @@ const UserModel = function (sequelize, DataTypes) {
             unique: true
         },
         password: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(1000),
             allowNull: false
         },
         tokens: {
             type: DataTypes.STRING(1000),
             defaultValue: ''
-
         }
     })
 
@@ -27,7 +26,9 @@ const UserModel = function (sequelize, DataTypes) {
         const user = this
         const token = jwt.sign({ id: user.id.toString() }, JWT_SECRET)
 
-        user.tokens += `${token},`
+        user.tokens += `${token}`
+        // user.tokens += `${token},`
+
         await user.save()
 
         return token
