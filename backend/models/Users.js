@@ -26,7 +26,7 @@ const UserModel = function (sequelize, DataTypes) {
         const user = this
         const token = jwt.sign({ id: user.id.toString() }, JWT_SECRET)
 
-        user.tokens += `${token}`
+        user.tokens = `${token}`
         // user.tokens += `${token},`
 
         await user.save()

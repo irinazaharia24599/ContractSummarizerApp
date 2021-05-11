@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 const db = {};
-//const dbConfig = require('../config/db.sample.json')
+//const dbConfig = require('../config/db.json')
 
 const sequelize = new Sequelize('licenta', 'root', 'pass', {
     dialect: 'mysql',
-    host: "localhost",
+    host: "127.0.0.1",
     logging: false,
     define: {
         timestamps: false

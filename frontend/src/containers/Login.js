@@ -110,6 +110,8 @@ class Login extends Component {
                 })
                 console.log(this.state)
             })
+
+            document.getElementById('container').classList.remove("right-panel-active");
         }
         else {
             e.preventDefault();
@@ -208,7 +210,7 @@ class Login extends Component {
                         </div>
                         <div className="overlay-panel overlay-right">
                             <h1>Bine ai venit!</h1>
-                            <p>Pentru a crea un cont, completează formularul de înregistrare cu datele personale.</p>
+                            <p>Poți crea un cont prin completarea formularului de înregistrare cu datele personale.</p>
                             <button className="ghost" id="signUp" onClick={this.signUpClickHandler}>Creează un cont</button>
                         </div>
                     </div>

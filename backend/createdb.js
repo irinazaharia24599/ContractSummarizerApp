@@ -5,18 +5,16 @@ db.sequelize.sync({ force: true }).then(async () => {
     console.log('tables created')
 
     let user = await db.Users.create({
-        firstName: 'Maria',
-        lastName: 'Popescu',
-        email: 'mariapopescu@gmail.com',
-        password: await bcrypt.hash('parola', 8),
+        firstName: 'Irina',
+        lastName: 'Zaharia',
+        email: 'irinazahariaa@gmail.com',
+        password: await bcrypt.hash('pas123', 8),
     })
 
     let contract = await db.Contracts.create({
-        name: 'contract 1',
+        name: 'contract1.txt',
         description: 'descriere contract: contractanti, obiectul contractului etc',
-        code: 'a1b2c3',
         userID: user.id
-
     })
 
 }).catch(err => {
