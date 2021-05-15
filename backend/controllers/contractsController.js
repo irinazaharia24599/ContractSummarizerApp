@@ -1,4 +1,6 @@
 const db = require('../models/index')
+const fs = require("fs");
+const Contracts = require('../models/Contracts');
 
 const listAllContracts = async (req, res) => {
     try {
@@ -83,8 +85,41 @@ const deleteContract = async (req, res) => {
     }
 }
 
+
+const uploadContract = async (req, res) => {
+    try {
+        console.log(req.file);
+
+        if (req.file == undefined) {
+            return res.send('You must select a file.');
+        }
+
+        const contract = db.Contracts;
+        
+        contract.create({
+            //userID: req.user.id,
+            type: req.file.mimetype,
+            name: req.file.originalname,
+            data: fs.readFileSync(
+                __basedir + '/uploads/' + req.file.filename
+            ),
+        }).then((file) => {
+            fs.writeFileSync(
+                __basedir + "/tmp/" + file.name,
+                file.data
+            );
+
+            return res.send(file);
+        });
+    } catch (error) {
+        console.log(error);
+        return res.send(`Error when trying upload contracts: ${error}`);
+    }
+};
+
 module.exports = {
     listAllContracts,
     addContract,
-    deleteContract
+    deleteContract,
+    uploadContract
 }

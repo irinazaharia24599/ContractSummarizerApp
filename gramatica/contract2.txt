@@ -10,7 +10,6 @@ II. Obiectul contractului
 III. Prețul contractului
 3.1. Prețul de vânzare este de 10000 EUR, echivalentul a 49200 lei, calculat la cursul de schimb valutar de 4.92 lei/EUR.
 3.2. Aceasta suma a fost încasată de cumpărător de la vânzător, astăzi, 21.10.2019 data autentificării prezentului contract, data de la care obiectul contractului intră în stăpânirea cumpărătorului de fapt și de drept.
-IV. Obligațiile părților
 4.1. Vânzătorul are următoarele obligații:
 a) să predea imobilul descris la pct. 2.1 de mai sus, la data prevăzută în contract;
 b) să garanteze cumpărătorul împotriva evicțiunii și împotriva viciilor ascunse.
