@@ -4,6 +4,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        encryptedName: DataTypes.STRING,
         data: DataTypes.BLOB('long'),
         type: DataTypes.STRING,
         description: DataTypes.STRING(2000),

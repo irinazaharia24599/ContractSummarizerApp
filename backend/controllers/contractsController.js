@@ -1,6 +1,10 @@
 const db = require('../models/index')
 const fs = require("fs");
 const Contracts = require('../models/Contracts');
+const nearley = require("nearley");
+const grammar = require("../gramatica/grammar2.js");
+const mammoth = require("mammoth");
+
 
 const listAllContracts = async (req, res) => {
     try {
@@ -9,15 +13,6 @@ const listAllContracts = async (req, res) => {
                 where: {
                     userID: req.params.id
                 }
-                // include:
-                //     [
-                //         {
-                //             model: db.Users,
-                //             where: {
-                //                 userID: req.params.id
-                //             }
-                //         }
-                //     ]
             }
         )
         if (!contracts) {
@@ -85,7 +80,6 @@ const deleteContract = async (req, res) => {
     }
 }
 
-
 const uploadContract = async (req, res) => {
     try {
         console.log(req.file);
@@ -95,25 +89,45 @@ const uploadContract = async (req, res) => {
         }
 
         const contract = db.Contracts;
+
+        const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+
+        var extractedText = new mammoth.extractRawText({ path: __basedir + '/uploads/' + req.file.filename })
+            .then(function (result) {
+                text = result.value
+                return text
+            })
         
+        var parsedContract = async () => {
+            parser.feed(await extractedText);
+            console.log(parser.results.join(''))
+            return parser.results.join('')
+        }
+
         contract.create({
-            //userID: req.user.id,
+            // userID: req.params.id,
             type: req.file.mimetype,
             name: req.file.originalname,
+            encryptedName: req.file.filename,
             data: fs.readFileSync(
                 __basedir + '/uploads/' + req.file.filename
             ),
+            description: await parsedContract()
         }).then((file) => {
-            fs.writeFileSync(
-                __basedir + "/tmp/" + file.name,
-                file.data
-            );
+            // fs.writeFileSync(
+            //     __basedir + "/tmp/" + file.name,
+            //     file.data
+            // );
 
-            return res.send(file);
+            //return res.send(file);
+            res.status(201).send({
+                status: "uploaded",
+                file
+            })
         });
     } catch (error) {
         console.log(error);
-        return res.send(`Error when trying upload contracts: ${error}`);
+        return res.send('Error when trying upload contracts: ${error}');
     }
 };
 

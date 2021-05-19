@@ -4,6 +4,8 @@ const contractsController = require('../controllers/contractsController')
 const auth = require('../controllers/auth')
 const upload = require('../controllers/upload')
 
+const nearley = require("nearley");
+
 const router = express.Router()
 
 router.get('/api/users', userController.listAllUsers) 
@@ -16,6 +18,7 @@ router.get('/api/contracts/:id', auth, contractsController.listAllContracts)
 router.post('/api/contracts', auth, contractsController.addContract)
 router.delete('/api/contracts/:id', auth, contractsController.deleteContract)
 
-router.post('/api/upload', upload.single('contract'), contractsController.uploadContract)
+// router.post('/api/upload/:id', upload.single('contract'), contractsController.uploadContract)
+router.post('/api/upload', auth, upload.single('contract'), contractsController.uploadContract)
 
 module.exports = router

@@ -5,16 +5,28 @@
 	box-sizing: border-box;
 }
 
-body {
+.bodyLogin {
 	background: #f6f5f7;
-	display: flex;
+	display: flex; 
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Montserrat', sans-serif;
-	height: 100vh;
+	height: 100vh; 
 	margin: -20px 0 50px;
+	/* margin: 0px */
 }
+
+/* .background {
+	background: #f6f5f7;
+	display: flex; 
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh; 
+	margin: -20px 0 50px;
+} */
 
 h1 {
 	font-weight: bold;
@@ -252,4 +264,12 @@ footer i {
 footer a {
     color: #3c97bf;
     text-decoration: none;
+}
+
+.errorMessage {
+	color: rgb(241, 89, 89);
+    /* font-family: Loew;
+    font-style: thin;
+    font-size: small; */
+    /* margin-left: 30px; */
 }

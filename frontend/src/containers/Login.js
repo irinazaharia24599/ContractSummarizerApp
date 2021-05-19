@@ -34,18 +34,10 @@ class Login extends Component {
         document.getElementById('container').classList.remove("right-panel-active");
     }
 
-    // constructor(props) {
-    //     super(props);
-    // }
-
     constructor(props) {
         super(props);
 
         this.state = {
-            // firstName: null,
-            // lastName: null,
-            // email: null,
-            // password: null,
             formErrors: {
                 firstName: "",
                 lastName: "",
@@ -81,7 +73,7 @@ class Login extends Component {
                 console.log(this.state)
 
                 //redirrect catre pagina contracte
-                //this.props.history.push('/contracts', { state: data })
+                this.props.history.push('/home/', { state: data })
             })
     }
 
@@ -111,7 +103,7 @@ class Login extends Component {
                 console.log(this.state)
             })
 
-            document.getElementById('container').classList.remove("right-panel-active");
+            //document.getElementById('container').classList.remove("right-panel-active");
         }
         else {
             e.preventDefault();
@@ -149,37 +141,60 @@ class Login extends Component {
         const { formErrors } = this.state;
 
         return (
-
+            <body className="bodyLogin">
             <div className="container" id="container">
                 <div className="form-container sign-up-container">
                     <form onSubmit={this.handleRegisterSubmit} noValidate>
                         <h1>Creează un cont</h1>
-                        <input
-                            className={formErrors.firstName.length > 0 ? "error" : null}
-                            type="text"
-                            placeholder="Nume"
-                            name="firstName"
-                            noValidate
-                            onChange={this.handleChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Prenume"
-                            name="lastName"
-                            noValidate
-                            onChange={this.handleChange} />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            noValidate
-                            onChange={this.handleChange} />
-                        <input
-                            type="password"
-                            placeholder="Parola"
-                            name="password"
-                            noValidate
-                            onChange={this.handleChange} />
+                        <div className="firstName">
+                            <input
+                                className={formErrors.firstName.length > 0 ? "error" : null}
+                                type="text"
+                                placeholder="Nume"
+                                name="firstName"
+                                noValidate
+                                onChange={this.handleChange}
+                            />
+                            {formErrors.firstName.length > 0 && (
+                                <span className="errorMessage">{formErrors.firstName}</span>
+                            )}
+                        </div>
+                        <div className="lastName">
+                            <input
+                                className={formErrors.lastName.length > 0 ? "error" : null}
+                                type="text"
+                                placeholder="Prenume"
+                                name="lastName"
+                                noValidate
+                                onChange={this.handleChange} />
+                            {formErrors.lastName.length > 0 && (
+                                <span className="errorMessage">{formErrors.lastName}</span>
+                            )}
+                        </div>
+                        <div className="email">
+                            <input
+                                className={formErrors.email.length > 0 ? "error" : null}
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                                noValidate
+                                onChange={this.handleChange} />
+                            {formErrors.email.length > 0 && (
+                                <span className="errorMessage">{formErrors.email}</span>
+                            )}
+                        </div>
+                        <div className="password">
+                            <input
+                                className={formErrors.password.length > 0 ? "error" : null}
+                                type="password"
+                                placeholder="Parola"
+                                name="password"
+                                noValidate
+                                onChange={this.handleChange} />
+                            {formErrors.password.length > 0 && (
+                                <span className="errorMessage">{formErrors.password}</span>
+                            )}
+                        </div>
                         <button onClick={e => this.handleRegisterSubmit(e)}>Register</button>
                     </form>
                 </div>
@@ -216,8 +231,9 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
+            </body>
         )
     }
 }
 
-export default Login;
+export default withRouter(Login);
