@@ -87,8 +87,6 @@ const uploadContract = async (req, res) => {
             return res.send('You must select a file.');
         }
 
-        const contract = db.Contracts;
-
         const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
 
         var extractedText = new mammoth.extractRawText({ path: __basedir + '/uploads/' + req.file.filename })
@@ -96,25 +94,26 @@ const uploadContract = async (req, res) => {
                 text = result.value
                 return text
             })
-        
+
         var parsedContract = async () => {
             parser.feed(await extractedText);
             console.log(parser.results.join(''))
             return parser.results.join('')
         }
 
-        contract.create({
+        db.Contracts.create({
             userID: req.params.id,
-            type: req.file.mimetype,
             name: req.file.originalname,
             encryptedName: req.file.filename,
-            data: fs.readFileSync(
-                __basedir + '/uploads/' + req.file.filename
-            ),
+            uploadDate: new Date().toLocaleDateString(),
             description: await parsedContract()
-        }).then((file) => {
-            res.status(201).send({ file })
-            console.log(file.name)
+            // type: req.file.mimetype,
+            // data: fs.readFileSync(
+            //     __basedir + '/uploads/' + req.file.filename
+            // ),
+        }).then((contract) => {
+            console.log(contract.name)
+            res.status(201).send({ contract })
         });
 
 

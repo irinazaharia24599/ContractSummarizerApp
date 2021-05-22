@@ -98,21 +98,22 @@ function Home(props) {
         })
         console.log(user)
 
-        fetch('http://localhost:8080/api/contracts/' + user.id, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + user.token,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-            .then(result => {
-                result.json()
-                console.log(result)
-            })
-            .then(data => {
-                console.log(data)
-            })
+        // fetch('http://localhost:8080/api/contracts/' + user.id, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Authorization': 'Bearer ' + user.token,
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // })
+        //     .then(result => {
+        //         result.json()
+        //         console.log(result)
+        //     })
+        //     .then(data => {
+        //         console.log(data)
+        //     })
 
     }, [location])
 
@@ -127,17 +128,19 @@ function Home(props) {
         formData.append('contract', selectedFile)
 
         fetch('http://localhost:8080/api/upload/' + user.id, {
+            // mode: 'no-cors',
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + user.token,
                 'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                //'Content-type': 'application/x-www-form-urlencoded',
+                // 'Content-type': 'multipart/form-data',
+                // 'Access-Control-Allow-Origin': '*'
+
             },
             body: formData
 
         }).then(response => {
             response.json()
-
         }).then(data => {
             console.log('Success:', data);
             //setUploadedContract(data)
