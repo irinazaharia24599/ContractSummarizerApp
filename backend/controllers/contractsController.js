@@ -82,7 +82,6 @@ const deleteContract = async (req, res) => {
 
 const uploadContract = async (req, res) => {
     try {
-        console.log(req.file);
 
         if (req.file == undefined) {
             return res.send('You must select a file.');
@@ -105,7 +104,7 @@ const uploadContract = async (req, res) => {
         }
 
         contract.create({
-            // userID: req.params.id,
+            userID: req.params.id,
             type: req.file.mimetype,
             name: req.file.originalname,
             encryptedName: req.file.filename,
@@ -114,17 +113,11 @@ const uploadContract = async (req, res) => {
             ),
             description: await parsedContract()
         }).then((file) => {
-            // fs.writeFileSync(
-            //     __basedir + "/tmp/" + file.name,
-            //     file.data
-            // );
-
-            //return res.send(file);
-            res.status(201).send({
-                status: "uploaded",
-                file
-            })
+            res.status(201).send({ file })
+            console.log(file.name)
         });
+
+
     } catch (error) {
         console.log(error);
         return res.send('Error when trying upload contracts: ${error}');
