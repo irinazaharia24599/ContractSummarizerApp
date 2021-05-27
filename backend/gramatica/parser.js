@@ -18,47 +18,24 @@ const mammoth = require("mammoth");
 
 // 2
 const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-
-parser.parseContract = async function (file) {
-
-    //var text;
-    var parsed;
-    mammoth.extractRawText({ path: __basedir + '/uploads/' + file.filename })
-        .then(function (result) {
-            var text = result.value; // The raw text 
-            //console.log(text);
-
-            parser.feed(text);
-            parsed = parser.results.join('')
-            // console.log(parser.results.join(''))
-            //return parser.results.join('')
-        })
-        .done();
-
-        // parser.feed(text)
-        // console.log(parser.results.join(''))
-        console.log(parsed)
-        //return await parser.results.join('')
-}
-
-module.exports = parser;
+// module.exports = parser;
 
 
 //3
-// async function main() {
+async function main() {
 
-//     mammoth.extractRawText({ path: "./Contract Donatie.docx" })
-//         .then(function (result) {
-//             var text = result.value; // The raw text 
-//             console.log(text);
+    mammoth.extractRawText({ path: "./Vanzare mobil (x24).docx" })
+        .then(function (result) {
+            var text = result.value; // The raw text 
+            // console.log(text);
 
-//             const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
-//             parser.feed(text);
-//             console.log(parser.results.join(''));
-//             //var messages = result.messages;
-//         })
-//         .done();
+            const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+            parser.feed(text);
+            console.log(parser.results[0]);
+            //var messages = result.messages;
+        })
+        .done();
 
-// }
+}
 
-// main().catch(err => console.log(err.stack));
+main().catch(err => console.log(err.stack));

@@ -16,7 +16,7 @@ router.get('/api/users/me', auth, userController.findUserById)
 
 router.get('/api/contracts/:id', auth, contractsController.listAllContracts)
 router.post('/api/contracts', auth, contractsController.addContract)
-router.delete('/api/contracts/:id', auth, contractsController.deleteContract)
+router.delete('/api/contracts/:id', contractsController.deleteContract)
 
 router.post('/api/upload/:id', auth, upload.single('contract'), contractsController.uploadContract)
 

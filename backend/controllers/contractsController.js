@@ -65,9 +65,9 @@ const deleteContract = async (req, res) => {
             })
         }
 
-        if (contract.userID !== req.user.id) {
-            return res.status(400).send({ error: "bad request" })
-        }
+        // if (contract.userID !== req.user.id) {
+        //     return res.status(400).send({ error: "bad request" })
+        // }
 
         await contract.destroy()
         res.send({
@@ -98,7 +98,8 @@ const uploadContract = async (req, res) => {
         var parsedContract = async () => {
             parser.feed(await extractedText);
             console.log(parser.results.join(''))
-            return parser.results.join('')
+            // return parser.results.join('')
+            return parser.results[0]
         }
 
         db.Contracts.create({
@@ -122,6 +123,8 @@ const uploadContract = async (req, res) => {
         return res.send('Error when trying upload contracts: ${error}');
     }
 };
+
+
 
 module.exports = {
     listAllContracts,

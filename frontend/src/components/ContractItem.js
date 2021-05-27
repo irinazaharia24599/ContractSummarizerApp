@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
-    marginTop: 10
+    marginTop: 10,
+    whiteSpace: 'pre-line'
   },
 });
 
@@ -19,12 +20,26 @@ export default function ContractItem(props) {
 
   const classes = useStyles();
 
+  const [status, setStatus] = useState();
   // const initialContract = {
   //   nume: '',
   //   descriere: '',
+  //   data: ''
   // }
   // const [contract, setContract]=useState();
   // setContract(props)
+
+  const handleDelete = () => {
+    fetch('http://localhost:8080/api/contracts/' + props.contract.id, {
+      method: 'DELETE'
+    }).then(() => {
+      setStatus('Delete successful')
+    })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  }
 
   return (
     <Card className={classes.root}>
@@ -37,11 +52,11 @@ export default function ContractItem(props) {
           title="Contemplative Reptile"
         /> */}
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            { props.contract.name }
+          <Typography gutterBottom variant="h6" component="h4">
+            {props.contract.name}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-          { props.contract.description }
+          <Typography variant="body2" color="textSecondary" component="p" style={{ textTransform: 'none' }} >
+            {props.contract.description}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -49,7 +64,7 @@ export default function ContractItem(props) {
         <Button size="small" color="primary">
           Descarcă
         </Button>
-        <Button size="small" color="primary">
+        <Button onClick={handleDelete} size="small" color="primary">
           Șterge
         </Button>
       </CardActions>
