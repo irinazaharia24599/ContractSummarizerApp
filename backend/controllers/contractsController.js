@@ -97,7 +97,7 @@ const uploadContract = async (req, res) => {
 
         var parsedContract = async () => {
             parser.feed(await extractedText);
-            console.log(parser.results.join(''))
+            console.log(parser.results[0])
             // return parser.results.join('')
             return parser.results[0]
         }

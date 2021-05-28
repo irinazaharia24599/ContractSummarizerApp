@@ -5,14 +5,15 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 import Typography from '@material-ui/core/Typography';
 import { IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
-
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
@@ -131,24 +132,27 @@ function Home(props) {
     const [uploadedContract, setUploadedContract] = useState(initialContract);
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
-    const [searchTerm, setSearchTerm]=useState('')
+    const [searchTerm, setSearchTerm] = useState('')
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
 
     const getContracte = () => {
         fetch(`http://localhost:8080/api/contracts/${user.id}`, {
-            method: 'GET',
+            // method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + user.token,
-                // 'Content-type': 'application/json'
+                'Content-type': 'application/json'
             }
         })
             .then(result =>
                 result.json()
             )
-            .then(data => {
-                // console.log(data)
+            .then(data =>
                 setContractList(data.contracts)
-            })
+            )
     }
+
     useEffect(() => {
         setUser({
             nume: location.state.state.user.firstName,
@@ -165,6 +169,24 @@ function Home(props) {
         // console.log('Lista contracte: ', contractList)
 
     }, [location])
+
+    const handleLogout = () => {
+        fetch(`http://localhost:8080/api/users/logout`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + user.token,
+                'Content-type': 'application/json'
+            }
+        }).then(history.push('/'))
+    }
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -204,6 +226,34 @@ function Home(props) {
             <div className={classes.root}>
                 <AppBar className={classes.appBar} position="relative">
                     <Toolbar>
+                        <div>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={open}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </Menu>
+                        </div>
                         <Typography className={classes.title} variant="h6" > {user.nume + ' ' + user.prenume}</Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
@@ -216,10 +266,9 @@ function Home(props) {
                                     input: classes.inputInput,
                                 }}
                                 inputProps={{ 'aria-label': 'search' }}
-                                onChange={ event => {setSearchTerm(event.target.value)}}
+                                onChange={event => { setSearchTerm(event.target.value) }}
                             />
                         </div>
-                        <IconButton color="inherit" > <ExitToAppIcon /> </IconButton>
                     </Toolbar>
                 </AppBar>
 
@@ -254,10 +303,10 @@ function Home(props) {
                 <div style={{ padding: 20 }}>
                     <Grid container direction="row" justify="space-evenly" alignItems="center">
                         {contractList.filter((contract) => {
-                            if (searchTerm === ''){
+                            if (searchTerm === '') {
                                 return contract
                             }
-                            else if (contract.name.toLowerCase().includes(searchTerm.toLowerCase())||contract.description.toLowerCase().includes(searchTerm.toLowerCase())){
+                            else if (contract.name.toLowerCase().includes(searchTerm.toLowerCase()) || contract.description.toLowerCase().includes(searchTerm.toLowerCase())) {
                                 return contract
                             }
                         }).map((contract) => <ContractItem contract={contract} />)}
