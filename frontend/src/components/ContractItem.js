@@ -4,7 +4,6 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
@@ -21,16 +20,26 @@ export default function ContractItem(props) {
   const classes = useStyles();
 
   const [status, setStatus] = useState();
-  // const initialContract = {
-  //   nume: '',
-  //   descriere: '',
-  //   data: ''
-  // }
-  // const [contract, setContract]=useState();
-  // setContract(props)
+
+  const handleDownload = () => {
+    fetch(`http://localhost:8080/api/download/${props.contract.id}`, {
+      method: 'GET'
+    })
+      .then(result => result.blob())
+      .then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = props.contract.name;
+        a.click();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
 
   const handleDelete = () => {
-    fetch('http://localhost:8080/api/contracts/' + props.contract.id, {
+    fetch(`http://localhost:8080/api/contracts/${props.contract.id}`, {
       method: 'DELETE'
     }).then(() => {
       setStatus('Delete successful')
@@ -44,13 +53,6 @@ export default function ContractItem(props) {
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        {/* <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title="Contemplative Reptile"
-        /> */}
         <CardContent>
           <Typography gutterBottom variant="h6" component="h4">
             {props.contract.name}
@@ -61,12 +63,8 @@ export default function ContractItem(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Descarcă
-        </Button>
-        <Button onClick={handleDelete} size="small" color="primary">
-          Șterge
-        </Button>
+        <Button onClick={handleDownload} size="small" color="primary"> Descarcă </Button>
+        <Button onClick={handleDelete} size="small" color="primary"> Șterge </Button>
       </CardActions>
     </Card>
   );

@@ -117,18 +117,18 @@ class Login extends Component {
         let formErrors = this.state.formErrors;
         switch (name) {
             case 'firstName':
-                formErrors.firstName = value.length < 3 ? 'minimum 3 characters required' : "";
+                formErrors.firstName = value.length < 3 ? 'Numele trebuie sa contina minimum 3 litere' : "";
                 break;
 
             case 'lastName':
-                formErrors.lastName = value.length < 3 ? 'minimum 3 characters required' : "";
+                formErrors.lastName = value.length < 3 ? 'Prenumele trebuie sa contina minimum 3 litere' : "";
                 break;
             case 'email':
                 formErrors.email =
-                    emailRegex.test(value) ? "" : "invalid email address";
+                    emailRegex.test(value) ? "" : "Adresa de email invalida";
                 break;
             case 'password':
-                formErrors.password = value.length < 6 ? 'minimum 6 characters required' : "";
+                formErrors.password = value.length < 6 ? 'Parola trebuie sa contina minimum 6 litere' : "";
                 break;
             default:
                 break;

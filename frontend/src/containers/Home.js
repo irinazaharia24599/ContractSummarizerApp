@@ -115,16 +115,12 @@ function Home(props) {
         name: "",
         description: "",
     }
-
+    
     const initialUser = {
         nume: "",
         prenume: "",
         id: "",
         token: ""
-    }
-
-    const initialContractList = {
-        contracts: ""
     }
 
     const [contractList, setContractList] = useState([]);
@@ -137,11 +133,11 @@ function Home(props) {
     const open = Boolean(anchorEl);
 
 
-    const getContracte = () => {
-        fetch(`http://localhost:8080/api/contracts/${user.id}`, {
-            // method: 'GET',
+    const getContracte = (id, token) => {
+        fetch(`http://localhost:8080/api/contracts/${id}`, {
+            method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + user.token,
+                'Authorization': 'Bearer ' + token,
                 'Content-type': 'application/json'
             }
         })
@@ -151,6 +147,7 @@ function Home(props) {
             .then(data =>
                 setContractList(data.contracts)
             )
+
     }
 
     useEffect(() => {
@@ -162,11 +159,8 @@ function Home(props) {
         })
         console.log(user)
 
-        getContracte()
-        const interval = setInterval(() => { getContracte() }, 1000);
+        const interval = setInterval(() => { getContracte(location.state.state.user.id, location.state.state.token) }, 500);
         return () => clearInterval(interval);
-
-        // console.log('Lista contracte: ', contractList)
 
     }, [location])
 
@@ -212,9 +206,6 @@ function Home(props) {
         ).then(data => {
             console.log('Success:', data);
             setUploadedContract(data)
-            // uploadedContract.userID = user.id
-            // uploadedContract.description = data.description
-            // uploadedContract.name = selectedFile.name
         })
             .catch((error) => {
                 console.error('Error:', error);
@@ -285,17 +276,21 @@ function Home(props) {
                             onChange={handleChange}
                         />
                         <label className={classes.inputLabel} htmlFor="contained-button-file">
-                            <Button variant="outlined" color="primary" component="span" startIcon={<CloudUploadIcon />} >Alege contract</Button>
+                            <Button variant="outlined" color="primary" component="span" startIcon={<CloudUploadIcon />} >Alege document</Button>
                         </label>
                         {isFilePicked ? (
                             <p className={classes.docDetail}>Document selectat: {selectedFile.name}</p>
                         ) : (
-                            <p className={classes.docDetail}>Selectează un document.</p>
+                            <p className={classes.docDetail}>Selectează un contract.</p>
                         )}
                     </div>
 
-                    <Button onClick={handleUpload} variant="contained" color="primary">
-                        Încarcă document </Button>
+                    {isFilePicked ? (
+                        <Button onClick={handleUpload} variant="contained" color="primary"> Încarcă document </Button>
+                    ) : (
+                        <Button onClick={handleUpload} variant="contained" color="primary" disabled> Încarcă document </Button>
+                    )}
+
                 </div>
 
                 <Divider variant="middle" />

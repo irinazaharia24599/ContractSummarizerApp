@@ -124,11 +124,30 @@ const uploadContract = async (req, res) => {
     }
 };
 
+const downloadContract = async (req, res) => {
+    try {
+        const contract = await db.Contracts.findByPk(req.params.id);
 
+        if (!contract) {
+            return res.status(404).send({
+                status: 'Not found'
+            })
+        }
+        var path = __basedir + '/uploads/' + contract.encryptedName;
+        res.download(path, contract.name);
+        // console.log("downloaded contract: " + path)
+
+    } catch (error) {
+        console.log(error);
+        return res.send('Error when trying to download contract: ${error}');
+    }
+
+}
 
 module.exports = {
     listAllContracts,
     addContract,
     deleteContract,
-    uploadContract
+    uploadContract,
+    downloadContract
 }
