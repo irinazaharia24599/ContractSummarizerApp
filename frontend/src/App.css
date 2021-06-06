@@ -1,9 +1,12 @@
-.App {
-  /* text-align: center; */
-}
+/* .App {
+  text-align: center;
+} */
 
 body {
   margin: 0px;
   font-family: 'Montserrat', sans-serif;
+  /* color: #f6f5f7; */
+  background: #fdfdfd;
+
 }
 

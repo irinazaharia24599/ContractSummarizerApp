@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         flexGrow: 1,
+        background: "#fdfdfd"
     },
     title: {
         flexGrow: 1,
@@ -115,7 +116,7 @@ function Home(props) {
         name: "",
         description: "",
     }
-    
+
     const initialUser = {
         nume: "",
         prenume: "",
@@ -296,7 +297,7 @@ function Home(props) {
                 <Divider variant="middle" />
 
                 <div style={{ padding: 20 }}>
-                    <Grid container direction="row" justify="space-evenly" alignItems="center">
+                    <Grid container direction="row" alignItems="flex-start" justify="space-around">
                         {contractList.filter((contract) => {
                             if (searchTerm === '') {
                                 return contract

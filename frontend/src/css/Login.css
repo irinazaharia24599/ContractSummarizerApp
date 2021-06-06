@@ -6,7 +6,7 @@
 }
 
 .bodyLogin {
-	background: #f6f5f7;
+	background: #fdfdfd;
 	display: flex; 
 	justify-content: center;
 	align-items: center;
@@ -17,8 +17,8 @@
 	/* margin: 0px */
 }
 
-/* .background {
-	background: #f6f5f7;
+.background {
+	background: #fdfdfd;
 	display: flex; 
 	justify-content: center;
 	align-items: center;
@@ -26,7 +26,7 @@
 	font-family: 'Montserrat', sans-serif;
 	height: 100vh; 
 	margin: -20px 0 50px;
-} */
+}
 
 h1 {
 	font-weight: bold;
