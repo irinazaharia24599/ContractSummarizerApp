@@ -4,7 +4,8 @@ const Contracts = require('../models/Contracts');
 const nearley = require("nearley");
 const grammar = require("../gramatica/grammar2.js");
 const mammoth = require("mammoth");
-
+const filepreview = require('filepreview-dp');
+const uuid = require('uuid').v4;
 
 const listAllContracts = async (req, res) => {
     try {
@@ -102,12 +103,18 @@ const uploadContract = async (req, res) => {
             return parser.results[0]
         }
 
+        // var contractThumbnail = uuid() + '.png';
+        // var filePath = __basedir + '/uploads/' + req.file.filename;
+        // var thumbnailPath = __basedir + '/thumbnails/' + contractThumbnail;
+        // filepreview.generateAsync(filePath, thumbnailPath.toString).then( () => done() ).catch( error => done(error));
+
         db.Contracts.create({
             userID: req.params.id,
             name: req.file.originalname,
             encryptedName: req.file.filename,
             uploadDate: new Date().toLocaleDateString(),
-            description: await parsedContract()
+            description: await parsedContract(),
+            // thumbnail: contractThumbnail
             // type: req.file.mimetype,
             // data: fs.readFileSync(
             //     __basedir + '/uploads/' + req.file.filename
@@ -122,7 +129,7 @@ const uploadContract = async (req, res) => {
         console.log(error);
         return res.send('Error when trying upload contracts: ${error}');
     }
-};
+}
 
 const downloadContract = async (req, res) => {
     try {
@@ -135,11 +142,35 @@ const downloadContract = async (req, res) => {
         }
         var path = __basedir + '/uploads/' + contract.encryptedName;
         res.download(path, contract.name);
-        // console.log("downloaded contract: " + path)
 
     } catch (error) {
         console.log(error);
         return res.send('Error when trying to download contract: ${error}');
+    }
+
+}
+
+const getContractText = async (req, res) => {
+    try {
+        const contract = await db.Contracts.findByPk(req.params.id);
+
+        if (!contract) {
+            return res.status(404).send({
+                status: 'Not found'
+            })
+        }
+
+        var extractedText = new mammoth.extractRawText({ path: __basedir + '/uploads/' + contract.encryptedName })
+            .then(function (result) {
+                text = result.value
+                return text
+            })
+
+        var text = await extractedText;
+        res.send({ status: "OK", text });
+    } catch (error) {
+        console.log(error);
+        return res.send('Error when trying to extract contract text: ${error}');
     }
 
 }
@@ -149,5 +180,6 @@ module.exports = {
     addContract,
     deleteContract,
     uploadContract,
-    downloadContract
+    downloadContract,
+    getContractText
 }

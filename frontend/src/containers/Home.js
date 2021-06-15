@@ -104,6 +104,9 @@ const useStyles = makeStyles((theme) => ({
         top: '50%',
         margin: '15px'
     }
+
+    //STEPPER
+
 }));
 
 function Home(props) {
@@ -148,7 +151,6 @@ function Home(props) {
             .then(data =>
                 setContractList(data.contracts)
             )
-
     }
 
     useEffect(() => {
@@ -263,6 +265,7 @@ function Home(props) {
                         </div>
                     </Toolbar>
                 </AppBar>
+
 
                 <div className={classes.divUpload}>
                     <div className={classes.divInput}>

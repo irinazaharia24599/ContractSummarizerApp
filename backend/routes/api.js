@@ -18,6 +18,7 @@ router.get('/api/contracts/:id', auth, contractsController.listAllContracts)
 router.post('/api/contracts', auth, contractsController.addContract)
 router.delete('/api/contracts/:id', contractsController.deleteContract)
 router.get('/api/download/:id', contractsController.downloadContract)
+router.get('/api/contract/text/:id', contractsController.getContractText)
 
 router.post('/api/upload/:id', auth, upload.single('contract'), contractsController.uploadContract)
 

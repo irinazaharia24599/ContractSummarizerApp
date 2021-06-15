@@ -5,11 +5,6 @@
 @include "obligatii.ne"
 @include "final.ne"
 
-# @{%
-#     const lexer = require("./lexer");
-# %}
-
-# @lexer lexer
 
 contract -> titlu clauze {% (data) => data[0] + data[1] %}
 titlu -> denumire _ml dataContract _ml  {% (data) => data[0] + data[2] %}

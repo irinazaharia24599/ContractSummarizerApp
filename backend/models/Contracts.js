@@ -5,11 +5,10 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         encryptedName: DataTypes.STRING,
-        // data: DataTypes.BLOB('long'),
-        // type: DataTypes.STRING,
         description: DataTypes.STRING(2000),
         userID: DataTypes.INTEGER,
-        uploadDate: DataTypes.DATEONLY
+        uploadDate: DataTypes.DATEONLY, 
+        // thumbnail: DataTypes.STRING
     })
 
     return Contracts
