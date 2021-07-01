@@ -17,7 +17,9 @@ const mammoth = require("mammoth");
     //     return await result
 
 // 2
+
 const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+
 // module.exports = parser;
 
 
@@ -32,6 +34,7 @@ async function main() {
             const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
             parser.feed(text);
             console.log(parser.results[0]);
+            
             //var messages = result.messages;
         })
         .done();

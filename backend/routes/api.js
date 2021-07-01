@@ -20,6 +20,9 @@ router.delete('/api/contracts/:id', contractsController.deleteContract)
 router.get('/api/download/:id', contractsController.downloadContract)
 router.get('/api/contract/text/:id', contractsController.getContractText)
 
+router.put('/api/document/:id', contractsController.updateDoc)
+router.post('/api/document/:id', contractsController.saveContract)
+
 router.post('/api/upload/:id', auth, upload.single('contract'), contractsController.uploadContract)
 
 module.exports = router

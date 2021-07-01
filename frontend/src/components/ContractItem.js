@@ -43,20 +43,45 @@ export default function ContractItem(props) {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
   const [text, setText] = useState('');
+  const [contractList, setContractList] = useState([]);
+
+  // const getText = (id) => {
+  //   fetch(`http://localhost:8080/api/contract/text/${id}`, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json'
+  //     }
+  //   })
+  //     .then(result =>
+  //       result.json()
+  //     )
+  //     .then(data =>{
+  //       console.log(data.text)
+  //       setText(data.text)
+  //     }
+  //     )
+  // }
 
   const getText = (id) => {
     fetch(`http://localhost:8080/api/contract/text/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'text/html',
+        'Accept': 'text/html'
       }
     })
       .then(result =>
-        result.json()
+        result.text()
       )
-      .then(data =>
-        setText(data.text)
-      )
+      .then(data => {
+        var parser = new DOMParser()
+
+        var doc = parser.parseFromString(data, "text/html")
+
+        // setText(doc.body.children)
+        console.log(doc.body.innerHTML)
+        document.getElementById("content").innerHTML = doc.body.innerHTML
+      })
+
   }
 
   const handleDownload = () => {
@@ -86,6 +111,7 @@ export default function ContractItem(props) {
         console.error('Error:', error);
       });
 
+    window.location.reload();
   }
 
   const handleClickOpen = (scrollType) => () => {
@@ -120,7 +146,7 @@ export default function ContractItem(props) {
           </Typography>
         </CardContent>
         <Dialog
-        classes={{ paper: classes.dialogPaper }}
+          classes={{ paper: classes.dialogPaper }}
           open={open}
           onClose={handleClose}
           scroll={scroll}
@@ -138,15 +164,11 @@ export default function ContractItem(props) {
           <DialogContent dividers={scroll === 'paper'}>
             <DialogContentText
               style={{ textTransform: 'none' }}
-              id="scroll-dialog-description"
               ref={descriptionElementRef}
               tabIndex={-1}
-              component="p"
-              style={{ textTransform: 'none' }}
+              id="content"
             > {text} </DialogContentText>
-            {/* <Typography id="scroll-dialog-description" color="textSecondary" ref={descriptionElementRef} tabIndex={-1} component = "p" style={{ textTransform: 'none' }} >
-              {text}
-            </Typography> */}
+            {/* <div> {text} </div> */}
           </DialogContent>
         </Dialog>
       </CardActionArea>

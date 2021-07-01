@@ -12,7 +12,7 @@ app.use(cors())
 
 //app.use('/', api)
 //app.use('/', express.static('../frontend'))
- app.use('/', api)
+app.use('/', api)
 
 app.listen(8080, () => {
     console.log('Server ruleaza pe port 8080')
