@@ -171,7 +171,14 @@ function Home(props) {
         token: ""
     }
 
-    const [descriere, setDescriere] = useState("");
+    // const [descriere, setDescriere] = React.useState({
+    //     description: ""
+    // });
+
+    // const [descriere, setDescriere] = useState("")
+
+    //let descriere;
+    let id;
 
     const [contractList, setContractList] = useState([]);
     const [user, setUser] = useState(initialUser);
@@ -295,7 +302,6 @@ function Home(props) {
     const steps = getSteps();
 
     const handleNext = () => {
-        // console.log(activeStep)
 
         if (activeStep === 0) {
             const formData = new FormData()
@@ -312,29 +318,36 @@ function Home(props) {
 
             }).then(response =>
                 response.json()
-            ).then(data =>
+            ).then(data =>{
                 setUploadedContract(data.contract)
-            )
+                id = uploadedContract.id;
+                console.log("ID " + id)
+            })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-            setDescriere(uploadedContract.description)
-            console.log(descriere)
+
+
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
         if (activeStep === 1) {
             //update descriere editata de utilizator
+            let descriere = uploadedContract.description;
+            console.log("ID " + id)
+            console.log("DESCRIERE "+descriere)
+
             fetch(`http://localhost:8080/api/document/${uploadedContract.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ descriere })
+                body: JSON.stringify(uploadedContract)
 
             }).then(response =>
                 response.json()
             ).then(data =>
-                console.log(uploadedContract.description)
+                console.log(data)
+                // console.log(uploadedContract.description)
             )
                 .catch((error) => {
                     console.error('Error:', error);
@@ -352,13 +365,14 @@ function Home(props) {
 
             }).then(response =>
                 response.json()
-            )
+            ).then(data => {
+                getContracte(user.id, user.token);
+
+            })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
 
-            //reincarca lista de contracte din grid
-            getContracte(user.id, user.token);
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
     };
@@ -376,8 +390,8 @@ function Home(props) {
 
     const handleChangeInput = event => {
         const { name, value } = event.target;
-        setDescriere({ ...descriere, [name]: value });
-        //setDescriere(event.target.value)
+        setUploadedContract({...uploadedContract, [name]: value})
+
     }
 
     function getStepContent(step) {
@@ -431,14 +445,16 @@ function Home(props) {
                 <TextField
                     id="outlined-multiline-static"
                     name="description"
+                    value={uploadedContract.description}
+                    onChange={handleChangeInput}
+                    // type="text"
                     multiline
                     rows={7}
-                    defaultValue={uploadedContract.description}
-                    onChange={handleChangeInput}
                     style={{ textTransform: 'none' }}
                     variant="outlined"
                     fullWidth
                 />
+
             </div>
         )
     }
@@ -552,48 +568,9 @@ function Home(props) {
                     </DialogContent>
                 </Dialog>
 
-                {/* <div className={classes.divUpload}> */}
-                {/* <div className={classes.divInput}>
-
-                        <input
-                            accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            className={classes.input}
-                            id="contained-button-file"
-                            style={{ display: 'none' }}
-                            type="file"
-                            name="contract"
-                            onChange={handleChange}
-                        />
-                        <label className={classes.inputLabel} htmlFor="contained-button-file">
-                            <Button variant="outlined" color="primary" component="span" startIcon={<CloudUploadIcon />} >Alege document</Button>
-                        </label>
-                        {isFilePicked ? (
-                            <p className={classes.docDetail}>Document selectat: {selectedFile.name}</p>
-                        ) : (
-                            <p className={classes.docDetail}>Selectează un contract.</p>
-                        )}
-                    </div> */}
-
-                {/* {isFilePicked ? (
-                        <Button onClick={handleUpload} variant="contained" color="primary"> Încarcă document </Button>
-                    ) : (
-                        <Button onClick={handleUpload} variant="contained" color="primary" disabled> Încarcă document </Button>
-                    )} */}
-
-                {/* </div> */}
-
-                {/* 
-                <DropzoneArea
-                    acceptedFiles={['application/vnd.openxmlformats-officedocument.wordprocessingml.document']}
-                    dropzoneText={"Adaugă un document"}
-                    onChange={(files) => console.log('Files:', files)}
-                /> */}
-
-                {/* <Divider variant="middle" /> */}
-
-                {contractList.length===0 ? (
+                {contractList.length === 0 ? (
                     <div>
-                        <ContractImage style={{ maxWidth: '500', display: 'block', marginLeft: 'auto', marginTop: '10%', marginRight: 'auto'}} />
+                        <ContractImage style={{ maxWidth: '500', display: 'block', marginLeft: 'auto', marginTop: '10%', marginRight: 'auto' }} />
                     </div>
                 ) : (
                     <div style={{ padding: 20 }}>
