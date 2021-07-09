@@ -65,83 +65,89 @@ class Login extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
-        }).then(response => response.json())
-            .then(data => {
+        }).then(response => {
+            if (response.ok)
+                response.json().then(data => {
 
-                this.setState({ user: data.user, token: data.token })
+                    this.setState({ user: data.user, token: data.token })
 
-                console.log(this.state)
+                    console.log(this.state)
 
-                //redirrect catre pagina contracte
-                this.props.history.push('/home/', { state: data })
-            })
-    }
-
-    handleRegisterSubmit = async e => {
-
-        if (formValid(this.state)) {
-            let user = {
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                email: this.state.email,
-                password: this.state.password,
-            }
-
-            const response = await fetch('http://localhost:8080/api/users', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user)
-            })
-            response.json().then(data => {
-                this.setState({
-                    user: data.user,
-                    token: data.token
+                    //redirrect catre pagina contracte
+                    this.props.history.push('/home/', { state: data }) 
                 })
-                console.log(this.state)
-            })
-
-            //document.getElementById('container').classList.remove("right-panel-active");
-        }
-        else {
-            e.preventDefault();
-            console.error('form invalid');
-        }
+            else {
+                alert("Încercarea dvs. de autentificare a eșuat. Vă rugăm să introduceți credențialele corespunzătoare contului dvs.");
+            }                            
+        })
+        
     }
 
-    handleChange = e => {
-        e.preventDefault();
-        const { name, value } = e.target;
-        let formErrors = this.state.formErrors;
-        switch (name) {
-            case 'firstName':
-                formErrors.firstName = value.length < 3 ? 'Numele trebuie sa contina minimum 3 litere' : "";
-                break;
+handleRegisterSubmit = async e => {
 
-            case 'lastName':
-                formErrors.lastName = value.length < 3 ? 'Prenumele trebuie sa contina minimum 3 litere' : "";
-                break;
-            case 'email':
-                formErrors.email =
-                    emailRegex.test(value) ? "" : "Adresa de email invalida";
-                break;
-            case 'password':
-                formErrors.password = value.length < 6 ? 'Parola trebuie sa contina minimum 6 litere' : "";
-                break;
-            default:
-                break;
+    if (formValid(this.state)) {
+        let user = {
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            email: this.state.email,
+            password: this.state.password,
         }
 
-        this.setState({ formErrors, [name]: value }, () => console.log(this.state));
-    };
+        const response = await fetch('http://localhost:8080/api/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        response.json().then(data => {
+            this.setState({
+                user: data.user,
+                token: data.token
+            })
+            console.log(this.state)
+        })
 
-    render() {
-        const { formErrors } = this.state;
+        //document.getElementById('container').classList.remove("right-panel-active");
+    }
+    else {
+        e.preventDefault();
+        console.error('form invalid');
+    }
+}
 
-        return (
-            <body className="bodyLogin">
+handleChange = e => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    let formErrors = this.state.formErrors;
+    switch (name) {
+        case 'firstName':
+            formErrors.firstName = value.length < 3 ? 'Numele trebuie sa contina minimum 3 litere' : "";
+            break;
+
+        case 'lastName':
+            formErrors.lastName = value.length < 3 ? 'Prenumele trebuie sa contina minimum 3 litere' : "";
+            break;
+        case 'email':
+            formErrors.email =
+                emailRegex.test(value) ? "" : "Adresa de email invalida";
+            break;
+        case 'password':
+            formErrors.password = value.length < 6 ? 'Parola trebuie sa contina minimum 6 litere' : "";
+            break;
+        default:
+            break;
+    }
+
+    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+};
+
+render() {
+    const { formErrors } = this.state;
+
+    return (
+        <body className="bodyLogin">
             <div className="container" id="container">
                 <div className="form-container sign-up-container">
                     <form onSubmit={this.handleRegisterSubmit} noValidate>
@@ -231,9 +237,9 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-            </body>
-        )
-    }
+        </body>
+    )
+}
 }
 
 export default withRouter(Login);

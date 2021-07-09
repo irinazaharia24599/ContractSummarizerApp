@@ -171,13 +171,6 @@ function Home(props) {
         token: ""
     }
 
-    // const [descriere, setDescriere] = React.useState({
-    //     description: ""
-    // });
-
-    // const [descriere, setDescriere] = useState("")
-
-    //let descriere;
     let id;
 
     const [contractList, setContractList] = useState([]);
@@ -322,13 +315,13 @@ function Home(props) {
                 setUploadedContract(data.contract)
                 id = uploadedContract.id;
                 console.log("ID " + id)
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
             })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    //console.error('Error:', error);
+                    alert("Documentul selectat nu respectă structura specifică. Alegeți un alt fișier.");
                 });
 
-
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
         if (activeStep === 1) {
             //update descriere editata de utilizator
@@ -447,12 +440,19 @@ function Home(props) {
                     name="description"
                     value={uploadedContract.description}
                     onChange={handleChangeInput}
-                    // type="text"
+                    type="text"
                     multiline
                     rows={7}
                     style={{ textTransform: 'none' }}
                     variant="outlined"
                     fullWidth
+                    autoFocus
+                    // inputProps={{ autoFocus: true }}
+                    onFocus={function(e) {
+                        var val = e.target.value;
+                        e.target.value = '';
+                        e.target.value = val;
+                      }}
                 />
 
             </div>
