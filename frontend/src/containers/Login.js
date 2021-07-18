@@ -74,172 +74,173 @@ class Login extends Component {
                     console.log(this.state)
 
                     //redirrect catre pagina contracte
-                    this.props.history.push('/home/', { state: data }) 
+                    this.props.history.push('/home/', { state: data })
                 })
             else {
                 alert("Încercarea dvs. de autentificare a eșuat. Vă rugăm să introduceți credențialele corespunzătoare contului dvs.");
-            }                            
+            }
         })
-        
+
     }
 
-handleRegisterSubmit = async e => {
+    handleRegisterSubmit = async e => {
 
-    if (formValid(this.state)) {
-        let user = {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email,
-            password: this.state.password,
+        if (formValid(this.state)) {
+            let user = {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                email: this.state.email,
+                password: this.state.password,
+            }
+
+            const response = await fetch('http://localhost:8080/api/users', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+            response.json().then(data => {
+                this.setState({
+                    user: data.user,
+                    token: data.token
+                })
+                console.log(this.state)
+            })
+
+            //document.getElementById('container').classList.remove("right-panel-active");
+        }
+        else {
+            e.preventDefault();
+            console.error('form invalid');
+            alert("Vă rugăm să completați fiecare câmp cu datele corespunzătoare.")
+        }
+    }
+
+    handleChange = e => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        let formErrors = this.state.formErrors;
+        switch (name) {
+            case 'firstName':
+                formErrors.firstName = value.length < 3 ? 'Numele trebuie sa contina minimum 3 litere' : "";
+                break;
+
+            case 'lastName':
+                formErrors.lastName = value.length < 3 ? 'Prenumele trebuie sa contina minimum 3 litere' : "";
+                break;
+            case 'email':
+                formErrors.email =
+                    emailRegex.test(value) ? "" : "Adresa de email invalida";
+                break;
+            case 'password':
+                formErrors.password = value.length < 6 ? 'Parola trebuie sa contina minimum 6 litere' : "";
+                break;
+            default:
+                break;
         }
 
-        const response = await fetch('http://localhost:8080/api/users', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        response.json().then(data => {
-            this.setState({
-                user: data.user,
-                token: data.token
-            })
-            console.log(this.state)
-        })
+        this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+    };
 
-        //document.getElementById('container').classList.remove("right-panel-active");
-    }
-    else {
-        e.preventDefault();
-        console.error('form invalid');
-    }
-}
+    render() {
+        const { formErrors } = this.state;
 
-handleChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    let formErrors = this.state.formErrors;
-    switch (name) {
-        case 'firstName':
-            formErrors.firstName = value.length < 3 ? 'Numele trebuie sa contina minimum 3 litere' : "";
-            break;
-
-        case 'lastName':
-            formErrors.lastName = value.length < 3 ? 'Prenumele trebuie sa contina minimum 3 litere' : "";
-            break;
-        case 'email':
-            formErrors.email =
-                emailRegex.test(value) ? "" : "Adresa de email invalida";
-            break;
-        case 'password':
-            formErrors.password = value.length < 6 ? 'Parola trebuie sa contina minimum 6 litere' : "";
-            break;
-        default:
-            break;
-    }
-
-    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
-};
-
-render() {
-    const { formErrors } = this.state;
-
-    return (
-        <body className="bodyLogin">
-            <div className="container" id="container">
-                <div className="form-container sign-up-container">
-                    <form onSubmit={this.handleRegisterSubmit} noValidate>
-                        <h1>Creează un cont</h1>
-                        <div className="firstName">
+        return (
+            <body className="bodyLogin">
+                <div className="container" id="container">
+                    <div className="form-container sign-up-container">
+                        <form onSubmit={this.handleRegisterSubmit} noValidate>
+                            <h1>Creează un cont</h1>
+                            <div className="firstName">
+                                <input
+                                    className={formErrors.firstName.length > 0 ? "error" : null}
+                                    type="text"
+                                    placeholder="Nume"
+                                    name="firstName"
+                                    noValidate
+                                    onChange={this.handleChange}
+                                />
+                                {formErrors.firstName.length > 0 && (
+                                    <span className="errorMessage">{formErrors.firstName}</span>
+                                )}
+                            </div>
+                            <div className="lastName">
+                                <input
+                                    className={formErrors.lastName.length > 0 ? "error" : null}
+                                    type="text"
+                                    placeholder="Prenume"
+                                    name="lastName"
+                                    noValidate
+                                    onChange={this.handleChange} />
+                                {formErrors.lastName.length > 0 && (
+                                    <span className="errorMessage">{formErrors.lastName}</span>
+                                )}
+                            </div>
+                            <div className="email">
+                                <input
+                                    className={formErrors.email.length > 0 ? "error" : null}
+                                    type="email"
+                                    placeholder="Email"
+                                    name="email"
+                                    noValidate
+                                    onChange={this.handleChange} />
+                                {formErrors.email.length > 0 && (
+                                    <span className="errorMessage">{formErrors.email}</span>
+                                )}
+                            </div>
+                            <div className="password">
+                                <input
+                                    className={formErrors.password.length > 0 ? "error" : null}
+                                    type="password"
+                                    placeholder="Parola"
+                                    name="password"
+                                    noValidate
+                                    onChange={this.handleChange} />
+                                {formErrors.password.length > 0 && (
+                                    <span className="errorMessage">{formErrors.password}</span>
+                                )}
+                            </div>
+                            <button onClick={e => this.handleRegisterSubmit(e)}>Register</button>
+                        </form>
+                    </div>
+                    <div className="form-container sign-in-container">
+                        <form action="#">
+                            <h1>Autentificare</h1>
                             <input
-                                className={formErrors.firstName.length > 0 ? "error" : null}
-                                type="text"
-                                placeholder="Nume"
-                                name="firstName"
-                                noValidate
-                                onChange={this.handleChange}
-                            />
-                            {formErrors.firstName.length > 0 && (
-                                <span className="errorMessage">{formErrors.firstName}</span>
-                            )}
-                        </div>
-                        <div className="lastName">
-                            <input
-                                className={formErrors.lastName.length > 0 ? "error" : null}
-                                type="text"
-                                placeholder="Prenume"
-                                name="lastName"
-                                noValidate
-                                onChange={this.handleChange} />
-                            {formErrors.lastName.length > 0 && (
-                                <span className="errorMessage">{formErrors.lastName}</span>
-                            )}
-                        </div>
-                        <div className="email">
-                            <input
-                                className={formErrors.email.length > 0 ? "error" : null}
+                                id="emailLogin"
                                 type="email"
                                 placeholder="Email"
-                                name="email"
                                 noValidate
                                 onChange={this.handleChange} />
-                            {formErrors.email.length > 0 && (
-                                <span className="errorMessage">{formErrors.email}</span>
-                            )}
-                        </div>
-                        <div className="password">
                             <input
-                                className={formErrors.password.length > 0 ? "error" : null}
+                                id="parolaLogin"
                                 type="password"
                                 placeholder="Parola"
-                                name="password"
                                 noValidate
                                 onChange={this.handleChange} />
-                            {formErrors.password.length > 0 && (
-                                <span className="errorMessage">{formErrors.password}</span>
-                            )}
-                        </div>
-                        <button onClick={e => this.handleRegisterSubmit(e)}>Register</button>
-                    </form>
-                </div>
-                <div className="form-container sign-in-container">
-                    <form action="#">
-                        <h1>Autentificare</h1>
-                        <input
-                            id="emailLogin"
-                            type="email"
-                            placeholder="Email"
-                            noValidate
-                            onChange={this.handleChange} />
-                        <input
-                            id="parolaLogin"
-                            type="password"
-                            placeholder="Parola"
-                            noValidate
-                            onChange={this.handleChange} />
-                        <button onClick={e => this.handleLoginSubmit(e)}>Login</button>
-                    </form>
-                </div>
-                <div className="overlay-container">
-                    <div className="overlay">
-                        <div className="overlay-panel overlay-left">
-                            <h1>Bine ai revenit!</h1>
-                            <p>Dacă ai deja un cont, te rugăm să te autentifici introducând datele de acces.</p>
-                            <button className="ghost" id="signIn" onClick={this.signInClickHandler}>Intră în cont</button>
-                        </div>
-                        <div className="overlay-panel overlay-right">
-                            <h1>Bine ai venit!</h1>
-                            <p>Poți crea un cont prin completarea formularului de înregistrare cu datele personale.</p>
-                            <button className="ghost" id="signUp" onClick={this.signUpClickHandler}>Creează un cont</button>
+                            <button onClick={e => this.handleLoginSubmit(e)}>Login</button>
+                        </form>
+                    </div>
+                    <div className="overlay-container">
+                        <div className="overlay">
+                            <div className="overlay-panel overlay-left">
+                                <h1>Bine ai revenit!</h1>
+                                <p>Dacă ai deja un cont, te rugăm să te autentifici introducând datele de acces.</p>
+                                <button className="ghost" id="signIn" onClick={this.signInClickHandler}>Intră în cont</button>
+                            </div>
+                            <div className="overlay-panel overlay-right">
+                                <h1>Bine ai venit!</h1>
+                                <p>Poți crea un cont prin completarea formularului de înregistrare cu datele personale.</p>
+                                <button className="ghost" id="signUp" onClick={this.signUpClickHandler}>Creează un cont</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </body>
-    )
-}
+            </body>
+        )
+    }
 }
 
 export default withRouter(Login);

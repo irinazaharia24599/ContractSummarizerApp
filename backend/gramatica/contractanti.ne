@@ -17,5 +17,5 @@ cnp -> "cu ":? "CNP" _ numar
 
 carteIdentitate -> ("identificat cu" | "identificată cu") " CI seria "  letter letter ",":? " nr. "  numar ",":? " eliberată de SPCEP " (nume | nume numar) ",":? " la data de " data ", valabilă până la data de " data
 
-calitate -> "în nume propriu, ":? "în calitate de " ("cumpărător" | "vânzător" | "coschimbaș" | "donator" | "donatar" )
+calitate -> "în nume propriu, ":? "în calitate de " ("cumpărător" | "vânzător" | "coschimbaș" | "copermutant prim" | "copermutant secund" |"donator" | "donatar" )
 

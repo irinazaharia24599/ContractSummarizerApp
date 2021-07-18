@@ -269,8 +269,13 @@ footer a {
 
 .errorMessage {
 	color: #CA0B00;
-    /* font-family: Loew;
-    font-style: thin;
-    font-size: small; */
-    margin-left: -10px;
+    margin-left: -9px;
+}
+
+.firstName, .lastName, .password, .email {
+	display: flex;
+    flex-direction: column;
+	width: 100%;
+    margin-bottom: 5px;
+
 }
