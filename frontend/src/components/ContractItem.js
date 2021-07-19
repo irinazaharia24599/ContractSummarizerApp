@@ -19,6 +19,7 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 345,
     marginTop: 10,
+    marginLeft: 20,
     whiteSpace: 'pre-line'
   },
 
@@ -26,7 +27,6 @@ const useStyles = makeStyles({
     position: 'absolute',
     right: 5,
     top: 5,
-    // color: theme.palette.grey[500],
   },
 
   dialogPaper: {
@@ -141,7 +141,7 @@ export default function ContractItem(props) {
           <Typography gutterBottom variant="h6" component="h4">
             {props.contract.name}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p" style={{ textTransform: 'none' }} >
+          <Typography variant="body2" color="textSecondary" component="p" style={{ height:"130px", textTransform: 'none' }} >
             {props.contract.description}
           </Typography>
         </CardContent>
@@ -168,7 +168,6 @@ export default function ContractItem(props) {
               tabIndex={-1}
               id="content"
             > {text} </DialogContentText>
-            {/* <div> {text} </div> */}
           </DialogContent>
         </Dialog>
       </CardActionArea>

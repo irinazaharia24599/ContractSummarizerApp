@@ -148,6 +148,14 @@ const useStyles = makeStyles((theme) => ({
     inputLabel: {
         top: '50%',
         margin: '15px'
+    },
+
+    grid: {
+        display: "flex",
+        flexWrap: "wrap",
+        margin: "10px",
+        // marginRight: "10px"
+
     }
 
 }));
@@ -311,7 +319,7 @@ function Home(props) {
 
             }).then(response =>
                 response.json()
-            ).then(data =>{
+            ).then(data => {
                 setUploadedContract(data.contract)
                 id = uploadedContract.id;
                 console.log("ID " + id)
@@ -327,7 +335,7 @@ function Home(props) {
             //update descriere editata de utilizator
             let descriere = uploadedContract.description;
             console.log("ID " + id)
-            console.log("DESCRIERE "+descriere)
+            console.log("DESCRIERE " + descriere)
 
             fetch(`http://localhost:8080/api/document/${uploadedContract.id}`, {
                 method: 'PUT',
@@ -383,7 +391,7 @@ function Home(props) {
 
     const handleChangeInput = event => {
         const { name, value } = event.target;
-        setUploadedContract({...uploadedContract, [name]: value})
+        setUploadedContract({ ...uploadedContract, [name]: value })
 
     }
 
@@ -448,11 +456,11 @@ function Home(props) {
                     fullWidth
                     autoFocus
                     // inputProps={{ autoFocus: true }}
-                    onFocus={function(e) {
+                    onFocus={function (e) {
                         var val = e.target.value;
                         e.target.value = '';
                         e.target.value = val;
-                      }}
+                    }}
                 />
 
             </div>
@@ -574,7 +582,8 @@ function Home(props) {
                     </div>
                 ) : (
                     <div style={{ padding: 20 }}>
-                        <Grid container direction="row" alignItems="flex-start" justify="space-around">
+                        {/* <Grid className={classes.grid} container direction="row" alignItems="flex-start" justify="space-around"> */}
+                        <div className={classes.grid}>
                             {contractList.filter((contract) => {
                                 if (searchTerm === '') {
                                     return contract
@@ -583,8 +592,10 @@ function Home(props) {
                                     return contract
                                 }
                             }).map((contract) => <ContractItem contract={contract} />)}
-                        </Grid>
+                            {/* </Grid> */}
+                        </div>
                     </div>
+
                 )}
 
             </div>
